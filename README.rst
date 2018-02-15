@@ -17,7 +17,9 @@ django-puppeteer-pdf
 Converts HTML to PDF
 --------------------
 
-Provides Django views to wrap the HTML to PDF conversion of the `puppeteer <https://github.com/GoogleChrome/puppeteer>`_ binary.
+Provides Django views to wrap the HTML to PDF conversion of the `puppeteer <https://github.com/GoogleChrome/puppeteer>`_.
+
+Forked from: `django-wkhtmltopdf <https://github.com/incuna/django-wkhtmltopdf>`_.
 
 Requirements
 ------------

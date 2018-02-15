@@ -58,7 +58,7 @@ Point a URL at :py:class:`PDFTemplateView`:
 .. code-block:: python
 
     from django.conf.urls.defaults import *
-    from puppeteer-pdf.views import PDFTemplateView
+    from puppeteer_pdf.views import PDFTemplateView
 
 
     urlpatterns = patterns('',
@@ -78,7 +78,7 @@ and override the sections you need to.
 
 .. code-block:: python
 
-    from puppeteer-pdf.views import PDFTemplateView
+    from puppeteer_pdf.views import PDFTemplateView
 
 
     class MyPDF(PDFTemplateView):

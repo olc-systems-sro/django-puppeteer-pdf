@@ -1,12 +1,23 @@
 SHELL := /bin/bash
 
 help:
-	@echo "Usage:"
-	@echo " make release | Release to pypi."
-	@echo " make test    | Run the tests."
+	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-25s\033[0m %s\n", $$1, $$2}'
 
-release:
-	python setup.py register sdist bdist_wheel upload
+
+#release:
+#	python setup.py register sdist bdist_wheel upload
 
 test:
 	python ./puppeteer_pdf/tests/run.py
+
+release: clean ## package and upload a release
+	python setup.py sdist upload
+	python setup.py bdist_wheel upload
+
+sdist: clean ## package
+	python setup.py sdist
+	ls -l dist
+
+bump: ## bump next version + by 0.0.1 patch
+	bumpversion patch
+
