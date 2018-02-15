@@ -5,8 +5,8 @@ django-puppeteer-pdf
     :target: http://badge.fury.io/py/django-puppeteer-pdf
     :alt: Latest version
 
-.. image:: https://travis-ci.org/incuna/django-puppeteer-pdf.png?branch=master
-   :target: https://travis-ci.org/incuna/django-puppeteer-pdf
+.. image:: https://travis-ci.org/namespace/django-puppeteer-pdf.png?branch=master
+   :target: https://travis-ci.org/namespace/django-puppeteer-pdf
    :alt: Travis-CI
 
 .. image:: https://img.shields.io/pypi/dm/django-puppeteer-pdf.svg
@@ -66,4 +66,4 @@ Documentation is available at http://django-puppeteer-pdf.readthedocs.org/en/lat
 License
 -------
 
-MIT licensed. See the bundled `LICENSE <https://github.com/incuna/django-puppeteer-pdf/blob/master/LICENSE>`_ file for more details.
+MIT licensed. See the bundled `LICENSE <https://github.com/namespace/django-puppeteer-pdf/blob/master/LICENSE>`_ file for more details.
