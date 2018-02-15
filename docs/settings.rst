@@ -44,7 +44,7 @@ for example:
     WKHTMLTOPDF_CMD_OPTIONS = {'title': 'TPS Report'}
 
 
-WKHTMLTOPDF_DEBUG
+PUPPETEER_PDF_DEBUG
 ~~~~~~~~~~~~~~~~~
 
 Default: same as :py:data:`settings.DEBUG`

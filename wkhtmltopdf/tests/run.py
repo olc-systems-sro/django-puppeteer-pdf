@@ -38,7 +38,7 @@ settings.configure(
             'OPTIONS': {},
         },
     ],
-    WKHTMLTOPDF_DEBUG=False,
+    PUPPETEER_PDF_DEBUG=False,
 )
 
 try:

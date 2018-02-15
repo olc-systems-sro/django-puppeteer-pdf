@@ -1,16 +1,16 @@
-django-wkhtmltopdf
+django-puppeteer-pdf
 ==================
 
-.. image:: https://badge.fury.io/py/django-wkhtmltopdf.png
-    :target: http://badge.fury.io/py/django-wkhtmltopdf
+.. image:: https://badge.fury.io/py/django-puppeteer-pdf.png
+    :target: http://badge.fury.io/py/django-puppeteer-pdf
     :alt: Latest version
 
-.. image:: https://travis-ci.org/incuna/django-wkhtmltopdf.png?branch=master
-   :target: https://travis-ci.org/incuna/django-wkhtmltopdf
+.. image:: https://travis-ci.org/incuna/django-puppeteer-pdf.png?branch=master
+   :target: https://travis-ci.org/incuna/django-puppeteer-pdf
    :alt: Travis-CI
 
-.. image:: https://img.shields.io/pypi/dm/django-wkhtmltopdf.svg
-    :target: https://badge.fury.io/py/django-wkhtmltopdf
+.. image:: https://img.shields.io/pypi/dm/django-puppeteer-pdf.svg
+    :target: https://badge.fury.io/py/django-puppeteer-pdf
     :alt: Number of PyPI downloads on a month
 
 
@@ -32,7 +32,7 @@ Python 2.6+ and 3.3+ are supported.
 Installation
 ------------
 
-Run ``pip install django-wkhtmltopdf``.
+Run ``pip install django-puppeteer-pdf``.
 
 Add ``'wkhtmltopdf'`` to ``INSTALLED_APPS`` in your ``settings.py``.
 
@@ -61,9 +61,9 @@ The default is: ::
 Documentation
 -------------
 
-Documentation is available at http://django-wkhtmltopdf.readthedocs.org/en/latest/.
+Documentation is available at http://django-puppeteer-pdf.readthedocs.org/en/latest/.
 
 License
 -------
 
-MIT licensed. See the bundled `LICENSE <https://github.com/incuna/django-wkhtmltopdf/blob/master/LICENSE>`_ file for more details.
+MIT licensed. See the bundled `LICENSE <https://github.com/incuna/django-puppeteer-pdf/blob/master/LICENSE>`_ file for more details.

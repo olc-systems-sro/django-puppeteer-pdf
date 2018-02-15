@@ -1,9 +1,9 @@
 ==================
-django-wkhtmltopdf
+django-puppeteer-pdf
 ==================
 
-``django-wkhtmltopdf`` allows a Django site to output dynamic PDFs. It utilises
-the wkhtmltopdf_ library, allowing you to write using the technologies you know
+``django-puppeteer-pdf`` allows a Django site to output dynamic PDFs. It utilises
+the puppeteer_ library, allowing you to write using the technologies you know
 - HTML and CSS - and output a PDF file.
 
 .. _wkhtmltopdf: http://wkhtmltopdf.org/
@@ -13,7 +13,7 @@ Quickstart
 
 .. code-block:: bash
 
-    pip install django-wkhtmltopdf
+    pip install django-puppeteer-pdf
 
 Grab the wkhtmltopdf binary_ for your platform.
 
@@ -46,7 +46,7 @@ Contribute
 
 You can fork the project on Github_.
 
-.. _Github: https://github.com/incuna/django-wkhtmltopdf
+.. _Github: https://github.com/incuna/django-puppeteer-pdf
 
 Contents
 ========

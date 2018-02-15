@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# django-wkhtmltopdf documentation build configuration file, created by
+# django-puppeteer-pdf documentation build configuration file, created by
 # sphinx-quickstart on Thu Nov 24 14:51:33 2011.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -42,7 +42,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'django-wkhtmltopdf'
+project = u'django-puppeteer-pdf'
 copyright = u'2012, Incuna Ltd'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -166,7 +166,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'django-wkhtmltopdfdoc'
+htmlhelp_basename = 'django-puppeteer-pdfdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -185,7 +185,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'django-wkhtmltopdf.tex', u'django-wkhtmltopdf Documentation',
+  ('index', 'django-puppeteer-pdf.tex', u'django-puppeteer-pdf Documentation',
    u'Incuna Ltd', 'manual'),
 ]
 
@@ -215,7 +215,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'django-wkhtmltopdf', u'django-wkhtmltopdf Documentation',
+    ('index', 'django-puppeteer-pdf', u'django-puppeteer-pdf Documentation',
      [u'Incuna Ltd'], 1)
 ]
 
@@ -229,8 +229,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'django-wkhtmltopdf', u'django-wkhtmltopdf Documentation',
-   u'Incuna Ltd', 'django-wkhtmltopdf', 'One line description of project.',
+  ('index', 'django-puppeteer-pdf', u'django-puppeteer-pdf Documentation',
+   u'Incuna Ltd', 'django-puppeteer-pdf', 'One line description of project.',
    'Miscellaneous'),
 ]
 

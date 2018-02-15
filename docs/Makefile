@@ -77,17 +77,17 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/django-wkhtmltopdf.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/django-puppeteer-pdf.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/django-wkhtmltopdf.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/django-puppeteer-pdf.qhc"
 
 devhelp:
 	$(SPHINXBUILD) -b devhelp $(ALLSPHINXOPTS) $(BUILDDIR)/devhelp
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/django-wkhtmltopdf"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/django-wkhtmltopdf"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/django-puppeteer-pdf"
+	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/django-puppeteer-pdf"
 	@echo "# devhelp"
 
 epub:
