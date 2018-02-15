@@ -17,14 +17,12 @@ django-puppeteer-pdf
 Converts HTML to PDF
 --------------------
 
-Provides Django views to wrap the HTML to PDF conversion of the `wkhtmltopdf <http://wkhtmltopdf.org>`_ binary.
+Provides Django views to wrap the HTML to PDF conversion of the `puppeteer <https://github.com/GoogleChrome/puppeteer>`_ binary.
 
 Requirements
 ------------
 
-Install the `wkhtmltopdf static binary <http://wkhtmltopdf.org/downloads.html>`_.
-
-This requires libfontconfig (on Ubuntu: ``sudo aptitude install libfontconfig``).
+Install the `puppeteer-pdf cli  <https://www.npmjs.com/package/puppeteer-pdf>`_.
 
 Python 2.6+ and 3.3+ are supported.
 
@@ -34,28 +32,28 @@ Installation
 
 Run ``pip install django-puppeteer-pdf``.
 
-Add ``'wkhtmltopdf'`` to ``INSTALLED_APPS`` in your ``settings.py``.
+Add ``'puppeteer_pdf'`` to ``INSTALLED_APPS`` in your ``settings.py``.
 
-By default it will execute the first ``wkhtmltopdf`` command found on your ``PATH``.
+By default it will execute the first ``puppeteer-pdf`` command found on your ``PATH``.
 
-If you can't add wkhtmltopdf to your ``PATH``, you can set ``WKHTMLTOPDF_CMD`` to a
+If you can't add wkhtmltopdf to your ``PATH``, you can set ``PUPPETEER_PDF_CMD`` to a
 specific executable:
 
 e.g. in ``settings.py``: ::
 
-    WKHTMLTOPDF_CMD = '/path/to/my/wkhtmltopdf'
+    PUPPETEER_PDF_CMD = '/path/to/my/puppeteer-pdf'
 
 or alternatively as env variable: ::
 
-    export WKHTMLTOPDF_CMD=/path/to/my/wkhtmltopdf
+    export PUPPETEER_PDF_CMD=/path/to/my/puppeteer-pdf
 
-You may also set ``WKHTMLTOPDF_CMD_OPTIONS`` in ``settings.py`` to a dictionary
+You may also set ``PUPPETEER_PDF_CMD_OPTIONS`` in ``settings.py`` to a dictionary
 of default command-line options.
 
 The default is: ::
 
-    WKHTMLTOPDF_CMD_OPTIONS = {
-        'quiet': True,
+    PUPPETEER_PDF_CMD_OPTIONS = {
+        'format': 'A4',
     }
 
 Documentation
