@@ -23,7 +23,7 @@ From source
 
 
 Installing the puppeteer-pdf
----------------------
+----------------------------
 
 Find the relevant version of the ``puppeteer-pdf``
 `downloads page`_.

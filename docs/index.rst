@@ -1,6 +1,6 @@
-==================
+====================
 django-puppeteer-pdf
-==================
+====================
 
 ``django-puppeteer-pdf`` allows a Django site to output dynamic PDFs. It utilises
 the puppeteer_ library, allowing you to write using the technologies you know
