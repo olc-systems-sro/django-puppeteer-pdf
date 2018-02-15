@@ -9,4 +9,4 @@ release:
 	python setup.py register sdist bdist_wheel upload
 
 test:
-	python ./wkhtmltopdf/tests/run.py
+	python ./puppeteer_pdf/tests/run.py

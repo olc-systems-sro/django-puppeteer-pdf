@@ -36,7 +36,7 @@ Add ``'puppeteer_pdf'`` to ``INSTALLED_APPS`` in your ``settings.py``.
 
 By default it will execute the first ``puppeteer-pdf`` command found on your ``PATH``.
 
-If you can't add wkhtmltopdf to your ``PATH``, you can set ``PUPPETEER_PDF_CMD`` to a
+If you can't add puppeteer-pdf to your ``PATH``, you can set ``PUPPETEER_PDF_CMD`` to a
 specific executable:
 
 e.g. in ``settings.py``: ::

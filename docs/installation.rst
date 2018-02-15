@@ -33,7 +33,7 @@ Find the relevant version of the ``puppeteer-pdf``
 Setting up your Django
 ----------------------
 
-Add ``wkhtmltopdf`` to your ``INSTALLED_APPS``:
+Add ``puppeteer_pdf`` to your ``INSTALLED_APPS``:
 
 .. code-block:: python
 

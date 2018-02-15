@@ -6,7 +6,7 @@ django-puppeteer-pdf
 the puppeteer_ library, allowing you to write using the technologies you know
 - HTML and CSS - and output a PDF file.
 
-.. _wkhtmltopdf: http://wkhtmltopdf.org/
+.. _puppeteer: https://www.npmjs.com/package/puppeteer-pdf
 
 Quickstart
 ==========
@@ -15,9 +15,9 @@ Quickstart
 
     pip install django-puppeteer-pdf
 
-Grab the wkhtmltopdf binary_ for your platform.
+Install the puppeteer-pdf cli puppeteer-pdf_ for your platform.
 
-.. _binary: http://wkhtmltopdf.org/downloads.html
+.. _puppeteer-pdf: https://www.npmjs.com/package/puppeteer-pdf
 
 ``settings.py``
 
@@ -25,7 +25,7 @@ Grab the wkhtmltopdf binary_ for your platform.
 
     INSTALLED_APPS = (
         # ...
-        'wkhtmltopdf',
+        'puppeteer_pdf',
         # ...
     )
 
@@ -34,7 +34,7 @@ Grab the wkhtmltopdf binary_ for your platform.
 .. code-block:: python
 
     from django.conf.urls.defaults import url, patterns
-    from wkhtmltopdf.views import PDFTemplateView
+    from puppeteer_pdf.views import PDFTemplateView
 
     urlpatterns = patterns('',
         url(r'^pdf/$', PDFTemplateView.as_view(template_name='my_template.html',
