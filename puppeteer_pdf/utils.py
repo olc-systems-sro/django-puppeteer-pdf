@@ -1,13 +1,11 @@
 from __future__ import absolute_import
 
+import os
+import re
 import subprocess
 import uuid
 from copy import copy
 from itertools import chain
-import os
-import re
-import sys
-import shlex
 from tempfile import NamedTemporaryFile
 
 from django.core.files import File
@@ -26,7 +24,6 @@ from django.template import loader
 from django.template.context import Context, RequestContext
 from django.utils import six
 
-from .subprocess import check_output
 
 NO_ARGUMENT_OPTIONS = ['-dhf', '--displayHeaderFooter', '-ht', '--printBackground', '-l',
                        '--landscape', '-h', '--help', '-V', '--version']
@@ -65,8 +62,7 @@ def puppeteer_to_pdf(input, output=None, **kwargs):
         puppeteer_to_pdf(input='/tmp/example.html')
     """
 
-    if not input.startswith('http') and not input.startswith('file'):
-        input = "file://{}".format(input)
+    input = file_path(input)
 
     if not output:
         output = '/tmp/{}.pdf'.format(uuid.uuid4())
@@ -98,6 +94,16 @@ def puppeteer_to_pdf(input, output=None, **kwargs):
     else:
         return None
 
+
+def file_path(path):
+    """Return path with file protocol
+    Ignore if it already starts with file path or http
+    """
+    if not path.startswith('http') and not path.startswith('file'):
+        path = "file://{}".format(path)
+    return path
+
+
 def convert_to_pdf(filename, header_filename=None, footer_filename=None, cmd_options=None):
     # Clobber header_html and footer_html only if filenames are
     # provided. These keys may be in self.cmd_options as hardcoded
@@ -107,12 +113,15 @@ def convert_to_pdf(filename, header_filename=None, footer_filename=None, cmd_opt
     cmd_options = cmd_options if cmd_options else {}
 
     if header_filename is not None:
-        with open(header_filename, 'r') as f:
-            cmd_options['headerTemplate'] = "'{}'".format(f.read().replace('\n', ''))
+        cmd_options['headerTemplate'] = file_path(header_filename)
+        # with open(header_filename, 'r') as f:
+        #     cmd_options['headerTemplate'] = "'{}'".format(f.read().replace('\n', ''))
     if footer_filename is not None:
-        with open(footer_filename, 'r') as f:
-            cmd_options['footerTemplate'] = "'{}'".format(f.read().replace('\n', ''))
+        cmd_options['footerTemplate'] = file_path(footer_filename)
+        # with open(footer_filename, 'r') as f:
+        #     cmd_options['footerTemplate'] = "'{}'".format(f.read().replace('\n', ''))
     return puppeteer_to_pdf(input=filename, **cmd_options)
+
 
 class RenderedFile(object):
     """
@@ -138,6 +147,7 @@ class RenderedFile(object):
         # Always close the temporary_file on object destruction.
         if self.temporary_file is not None:
             self.temporary_file.close()
+
 
 def render_pdf_from_template(input_template, header_template, footer_template, context, request=None, cmd_options=None):
     # For basic usage. Performs all the actions necessary to create a single
@@ -175,6 +185,7 @@ def render_pdf_from_template(input_template, header_template, footer_template, c
                           header_filename=header_filename,
                           footer_filename=footer_filename,
                           cmd_options=cmd_options)
+
 
 def content_disposition_filename(filename):
     """
@@ -246,6 +257,7 @@ def make_absolute_paths(content):
                                       occur[len(x['url']):])
 
     return content
+
 
 def render_to_temporary_file(template, context, request=None, mode='w+b',
                              bufsize=-1, suffix='.html', prefix='tmp',
