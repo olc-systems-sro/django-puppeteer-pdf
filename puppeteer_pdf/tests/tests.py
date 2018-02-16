@@ -6,15 +6,13 @@ import os
 import sys
 
 from django.conf import settings
-from django.template import loader, RequestContext
+from django.template import loader
 from django.test import TestCase
 from django.test.client import RequestFactory
-from django.utils import six
 from django.utils.encoding import smart_str
 
-from puppeteer_pdf.subprocess import CalledProcessError
 from puppeteer_pdf.utils import (_options_to_args, make_absolute_paths, render_pdf_from_template,
-                               render_to_temporary_file, RenderedFile, puppeteer_to_pdf)
+                                 render_to_temporary_file, RenderedFile, puppeteer_to_pdf)
 from puppeteer_pdf.views import PDFResponse, PDFTemplateView, PDFTemplateResponse
 
 
@@ -24,6 +22,7 @@ class UnicodeContentPDFTemplateView(PDFTemplateView):
 
     Used in unicode content view testing.
     """
+
     def get_context_data(self, **kwargs):
         Base = super(UnicodeContentPDFTemplateView, self)
         context = Base.get_context_data(**kwargs)
@@ -129,7 +128,7 @@ class TestUtils(TestCase):
             debug = getattr(settings, 'PUPPETEER_PDF_DEBUG', settings.DEBUG)
 
             saved_content, filename = self._render_file(template=template,
-                                                    context={'title': title})
+                                                        context={'title': title})
             # First verify temp file was rendered correctly.
             self.assertTrue(title in saved_content)
 
@@ -140,7 +139,7 @@ class TestUtils(TestCase):
     def test_render_with_null_request(self):
         """If request=None, the file should render properly."""
         title = 'A test template.'
-        template = loader.get_template('sample.html')
+        loader.get_template('sample.html')
         pdf_content = render_pdf_from_template('sample.html',
                                                header_template=None,
                                                footer_template=None,
@@ -196,19 +195,19 @@ class TestViews(TestCase):
 
         # Content as a direct output
         response = PDFResponse(content=content, filename="nospace.pdf",
-            show_content_in_browser=True)
+                               show_content_in_browser=True)
         self.assertEqual(response['Content-Disposition'],
                          'inline; filename="nospace.pdf"')
         response = PDFResponse(content=content, filename="one space.pdf",
-            show_content_in_browser=True)
+                               show_content_in_browser=True)
         self.assertEqual(response['Content-Disposition'],
                          'inline; filename="one space.pdf"')
         response = PDFResponse(content=content, filename="4'5\".pdf",
-            show_content_in_browser=True)
+                               show_content_in_browser=True)
         self.assertEqual(response['Content-Disposition'],
                          'inline; filename="4\'5.pdf"')
         response = PDFResponse(content=content, filename=u"♥.pdf",
-            show_content_in_browser=True)
+                               show_content_in_browser=True)
         try:
             import unidecode
         except ImportError:

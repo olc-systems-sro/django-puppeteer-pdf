@@ -24,9 +24,8 @@ from django.template import loader
 from django.template.context import Context, RequestContext
 from django.utils import six
 
-
-NO_ARGUMENT_OPTIONS = ['-dhf', '--displayHeaderFooter', '-ht', '--printBackground', '-l',
-                       '--landscape', '-h', '--help', '-V', '--version']
+NO_ARGUMENT_OPTIONS = ['-dhf', '--displayHeaderFooter', '-ht', '--printBackground', '-l', '--landscape',
+                       '-h', '--help', '-V', '--version']
 
 
 def _options_to_args(**options):
@@ -35,6 +34,7 @@ def _options_to_args(**options):
     Skip arguments where no value is provided
     For flag-type (No argument) variables, pass only the name and only then if the value is True
     """
+
     flags = []
     for name in sorted(options):
         value = options[name]
@@ -76,7 +76,7 @@ def puppeteer_to_pdf(input, output=None, **kwargs):
     options.update(kwargs)
 
     cmd = 'PUPPETEER_PDF_CMD'
-    CHROME_LOCATION = 'puppeteer-pdf' # default
+    CHROME_LOCATION = 'puppeteer-pdf'  # default
     cmd = getattr(settings, cmd, os.environ.get(cmd, CHROME_LOCATION))
 
     ck_args = list(chain([cmd],
