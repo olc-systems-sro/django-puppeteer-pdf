@@ -61,6 +61,7 @@ def puppeteer_to_pdf(input, output=None, **kwargs):
     example usage:
         puppeteer_to_pdf(input='/tmp/example.html')
     """
+    debug = getattr(settings, 'PUPPETEER_PDF_DEBUG', os.environ.get('PUPPETEER_PDF_DEBUG', settings.DEBUG))
 
     input = file_path(input)
 
@@ -84,7 +85,7 @@ def puppeteer_to_pdf(input, output=None, **kwargs):
                          _options_to_args(**options)))
 
     sub_cmd = ' '.join(ck_args)
-    if settings.DEBUG:
+    if debug:
         print(sub_cmd)
     subprocess.call(sub_cmd, shell=True)
 
@@ -132,7 +133,7 @@ class RenderedFile(object):
     filename = ''
 
     def __init__(self, template, context, request=None):
-        debug = getattr(settings, 'PUPPETEER_PDF_DEBUG', settings.DEBUG)
+        debug = getattr(settings, 'PUPPETEER_PDF_DEBUG', os.environ.get('PUPPETEER_PDF_DEBUG', settings.DEBUG))
 
         self.temporary_file = render_to_temporary_file(
             template=template,
