@@ -49,7 +49,7 @@ before_install:
   - npm install -g puppeteer-pdf
 install:
   - pip install $DJANGO
-  - pip install -r test_requirements.txt
+  - pip install -r requirements/test_requirements.txt
   - pip install .
 script:
   - make test

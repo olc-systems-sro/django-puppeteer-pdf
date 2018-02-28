@@ -5,8 +5,8 @@ django-puppeteer-pdf
     :target: http://badge.fury.io/py/django-puppeteer-pdf
     :alt: Latest version
 
-.. image:: https://travis-ci.org/namespace/django-puppeteer-pdf.png?branch=master
-   :target: https://travis-ci.org/namespace/django-puppeteer-pdf
+.. image:: https://travis-ci.org/namespace-ee/django-puppeteer-pdf.png?branch=master
+   :target: https://travis-ci.org/namespace-ee/django-puppeteer-pdf
    :alt: Travis-CI
 
 .. image:: https://img.shields.io/pypi/dm/django-puppeteer-pdf.svg
@@ -17,14 +17,14 @@ django-puppeteer-pdf
 Converts HTML to PDF
 --------------------
 
-Provides Django views to wrap the HTML to PDF conversion of the `puppeteer <https://github.com/GoogleChrome/puppeteer>`_.
+Provides Django views to wrap the HTML to PDF conversion using `puppeteer <https://github.com/GoogleChrome/puppeteer>`_.
 
 Forked from: `django-wkhtmltopdf <https://github.com/incuna/django-wkhtmltopdf>`_.
 
 Requirements
 ------------
 
-Install the `puppeteer-pdf cli  <https://www.npmjs.com/package/puppeteer-pdf>`_.
+cli for puppeteer `puppeteer-pdf <https://www.npmjs.com/package/puppeteer-pdf>`_.
 
 Python 2.6+ and 3.3+ are supported.
 
