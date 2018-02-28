@@ -13,6 +13,10 @@
 
 import sys, os
 
+cwd = os.getcwd()
+parent = os.path.dirname(cwd)
+sys.path.append(parent)
+
 import puppeteer_pdf
 
 # If extensions (or modules to document with autodoc) are in another directory,
