@@ -66,7 +66,7 @@ def puppeteer_to_pdf(input, output=None, **kwargs):
     input = file_path(input)
 
     if not output:
-        output = '/tmp/{}.pdf'.format(uuid.uuid4())
+        output = '/tmp/{0}.pdf'.format(uuid.uuid4())
 
     # Default options:
     options = getattr(settings, 'PUPPETEER_PDF_CMD_OPTIONS', None)
