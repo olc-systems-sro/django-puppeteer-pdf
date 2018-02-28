@@ -101,7 +101,7 @@ def file_path(path):
     Ignore if it already starts with file path or http
     """
     if not path.startswith('http') and not path.startswith('file'):
-        path = "file://{}".format(path)
+        path = "file://{0}".format(path)
     return path
 
 
