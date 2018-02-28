@@ -1,30 +1,30 @@
-django-wkhtmltopdf
+django-puppeteer-pdf
 ==================
 
-.. image:: https://badge.fury.io/py/django-wkhtmltopdf.png
-    :target: http://badge.fury.io/py/django-wkhtmltopdf
+.. image:: https://badge.fury.io/py/django-puppeteer-pdf.png
+    :target: http://badge.fury.io/py/django-puppeteer-pdf
     :alt: Latest version
 
-.. image:: https://travis-ci.org/incuna/django-wkhtmltopdf.png?branch=master
-   :target: https://travis-ci.org/incuna/django-wkhtmltopdf
+.. image:: https://travis-ci.org/namespace/django-puppeteer-pdf.png?branch=master
+   :target: https://travis-ci.org/namespace/django-puppeteer-pdf
    :alt: Travis-CI
 
-.. image:: https://img.shields.io/pypi/dm/django-wkhtmltopdf.svg
-    :target: https://badge.fury.io/py/django-wkhtmltopdf
+.. image:: https://img.shields.io/pypi/dm/django-puppeteer-pdf.svg
+    :target: https://badge.fury.io/py/django-puppeteer-pdf
     :alt: Number of PyPI downloads on a month
 
 
 Converts HTML to PDF
 --------------------
 
-Provides Django views to wrap the HTML to PDF conversion of the `wkhtmltopdf <http://wkhtmltopdf.org>`_ binary.
+Provides Django views to wrap the HTML to PDF conversion of the `puppeteer <https://github.com/GoogleChrome/puppeteer>`_.
+
+Forked from: `django-wkhtmltopdf <https://github.com/incuna/django-wkhtmltopdf>`_.
 
 Requirements
 ------------
 
-Install the `wkhtmltopdf static binary <http://wkhtmltopdf.org/downloads.html>`_.
-
-This requires libfontconfig (on Ubuntu: ``sudo aptitude install libfontconfig``).
+Install the `puppeteer-pdf cli  <https://www.npmjs.com/package/puppeteer-pdf>`_.
 
 Python 2.6+ and 3.3+ are supported.
 
@@ -32,38 +32,38 @@ Python 2.6+ and 3.3+ are supported.
 Installation
 ------------
 
-Run ``pip install django-wkhtmltopdf``.
+Run ``pip install django-puppeteer-pdf``.
 
-Add ``'wkhtmltopdf'`` to ``INSTALLED_APPS`` in your ``settings.py``.
+Add ``'puppeteer_pdf'`` to ``INSTALLED_APPS`` in your ``settings.py``.
 
-By default it will execute the first ``wkhtmltopdf`` command found on your ``PATH``.
+By default it will execute the first ``puppeteer-pdf`` command found on your ``PATH``.
 
-If you can't add wkhtmltopdf to your ``PATH``, you can set ``WKHTMLTOPDF_CMD`` to a
+If you can't add puppeteer-pdf to your ``PATH``, you can set ``PUPPETEER_PDF_CMD`` to a
 specific executable:
 
 e.g. in ``settings.py``: ::
 
-    WKHTMLTOPDF_CMD = '/path/to/my/wkhtmltopdf'
+    PUPPETEER_PDF_CMD = '/path/to/my/puppeteer-pdf'
 
 or alternatively as env variable: ::
 
-    export WKHTMLTOPDF_CMD=/path/to/my/wkhtmltopdf
+    export PUPPETEER_PDF_CMD=/path/to/my/puppeteer-pdf
 
-You may also set ``WKHTMLTOPDF_CMD_OPTIONS`` in ``settings.py`` to a dictionary
+You may also set ``PUPPETEER_PDF_CMD_OPTIONS`` in ``settings.py`` to a dictionary
 of default command-line options.
 
 The default is: ::
 
-    WKHTMLTOPDF_CMD_OPTIONS = {
-        'quiet': True,
+    PUPPETEER_PDF_CMD_OPTIONS = {
+        'format': 'A4',
     }
 
 Documentation
 -------------
 
-Documentation is available at http://django-wkhtmltopdf.readthedocs.org/en/latest/.
+Documentation is available at http://django-puppeteer-pdf.readthedocs.org/en/latest/.
 
 License
 -------
 
-MIT licensed. See the bundled `LICENSE <https://github.com/incuna/django-wkhtmltopdf/blob/master/LICENSE>`_ file for more details.
+MIT licensed. See the bundled `LICENSE <https://github.com/namespace/django-puppeteer-pdf/blob/master/LICENSE>`_ file for more details.

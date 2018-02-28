@@ -1,19 +1,19 @@
 from setuptools import setup, find_packages
 
-import wkhtmltopdf
+import puppeteer_pdf
 
 
 setup(
-    name='django-wkhtmltopdf',
+    name='django-puppeteer-pdf',
     packages=find_packages(),
     include_package_data=True,
-    version=wkhtmltopdf.__version__,
-    description='Converts HTML to PDF using wkhtmltopdf.',
+    version=puppeteer_pdf.__version__,
+    description='Converts HTML to PDF using puppeteer.',
     long_description=open('README.rst').read(),
     license='BSD-2-Clause',
-    author=wkhtmltopdf.__author__,
+    author=puppeteer_pdf.__author__,
     author_email='admin@incuna.com',
-    url='https://github.com/incuna/django-wkhtmltopdf',
+    url='https://github.com/incuna/django-puppeteer-pdf',
     zip_safe=False,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -29,5 +29,5 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Framework :: Django',
     ],
-    keywords='django wkhtmltopdf pdf',
+    keywords='django puppeteer pdf',
 )

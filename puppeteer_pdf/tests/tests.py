@@ -6,17 +6,14 @@ import os
 import sys
 
 from django.conf import settings
-from django.template import loader, RequestContext
+from django.template import loader
 from django.test import TestCase
 from django.test.client import RequestFactory
-from django.utils import six
 from django.utils.encoding import smart_str
 
-from wkhtmltopdf.subprocess import CalledProcessError
-from wkhtmltopdf.utils import (_options_to_args, make_absolute_paths,
-                               wkhtmltopdf, render_pdf_from_template,
-                               render_to_temporary_file, RenderedFile)
-from wkhtmltopdf.views import PDFResponse, PDFTemplateView, PDFTemplateResponse
+from puppeteer_pdf.utils import (_options_to_args, make_absolute_paths, render_pdf_from_template,
+                                 render_to_temporary_file, RenderedFile, puppeteer_to_pdf)
+from puppeteer_pdf.views import PDFResponse, PDFTemplateView, PDFTemplateResponse
 
 
 class UnicodeContentPDFTemplateView(PDFTemplateView):
@@ -25,6 +22,7 @@ class UnicodeContentPDFTemplateView(PDFTemplateView):
 
     Used in unicode content view testing.
     """
+
     def get_context_data(self, **kwargs):
         Base = super(UnicodeContentPDFTemplateView, self)
         context = Base.get_context_data(**kwargs)
@@ -44,52 +42,46 @@ class TestUtils(TestCase):
 
     def test_options_to_args(self):
         self.assertEqual(_options_to_args(), [])
-        self.assertEqual(_options_to_args(heart=u'♥', verbose=True,
-                                          file_name='file-name'),
-                         ['--file-name', 'file-name',
+        self.assertEqual(_options_to_args(heart=u'♥', displayHeaderFooter=True,
+                                          path='file-path'),
+                         ['--displayHeaderFooter',
                           '--heart', u'♥',
-                          '--verbose'])
-        self.assertEqual(_options_to_args(heart=u'♥', quiet=True,
-                                          file_name='file-name'),
-                         ['--file-name', 'file-name',
-                          '--heart', u'♥',
-                          '--quiet'])
-        self.assertEqual(_options_to_args(heart=u'♥', quiet=False,
-                                          file_name='file-name'),
-                         ['--file-name', 'file-name',
-                          '--heart', u'♥'])
+                          '--path', 'file-path'])
+        self.assertEqual(_options_to_args(heart=u'♥', landscape=True,
+                                          path='file-path'),
+                         ['--heart', u'♥',
+                          '--landscape',
+                          '--path', 'file-path'])
 
-    def test_wkhtmltopdf(self):
-        """Should run wkhtmltopdf to generate a PDF"""
+        self.assertEqual(_options_to_args(heart=u'♥', landscape=False,
+                                          path='file-path'),
+                         ['--heart', u'♥',
+                          '--path', 'file-path'])
+
+    def test_puppeteer_to_pdf(self):
+        """Should run puppeteer to generate a PDF"""
         title = 'A test template.'
         template = loader.get_template('sample.html')
         temp_file = render_to_temporary_file(template, context={'title': title})
         try:
-            # Standard call
-            pdf_output = wkhtmltopdf(pages=[temp_file.name])
-            self.assertTrue(pdf_output.startswith(b'%PDF'), pdf_output)
-
             # Single page
-            pdf_output = wkhtmltopdf(pages=temp_file.name)
+            pdf_output = puppeteer_to_pdf(input=temp_file.name)
             self.assertTrue(pdf_output.startswith(b'%PDF'), pdf_output)
 
             # Unicode
-            pdf_output = wkhtmltopdf(pages=[temp_file.name], title=u'♥')
+            pdf_output = puppeteer_to_pdf(input=temp_file.name, title=u'♥')
             self.assertTrue(pdf_output.startswith(b'%PDF'), pdf_output)
 
-            # Invalid arguments
-            self.assertRaises(CalledProcessError,
-                              wkhtmltopdf, pages=[])
         finally:
             temp_file.close()
 
-    def test_wkhtmltopdf_with_unicode_content(self):
-        """A wkhtmltopdf call should render unicode content properly"""
+    def test_puppeteer_to_pdf_with_unicode_content(self):
+        """A puppeteer_to_pdf call should render unicode content properly"""
         title = u'♥'
         template = loader.get_template('unicode.html')
         temp_file = render_to_temporary_file(template, context={'title': title})
         try:
-            pdf_output = wkhtmltopdf(pages=[temp_file.name])
+            pdf_output = puppeteer_to_pdf(input=temp_file.name)
             self.assertTrue(pdf_output.startswith(b'%PDF'), pdf_output)
         finally:
             temp_file.close()
@@ -114,10 +106,10 @@ class TestUtils(TestCase):
         return (saved_content, render.filename)
 
     def test_rendered_file_deleted_on_production(self):
-        """If WKHTMLTOPDF_DEBUG=False, delete rendered file on object close."""
+        """If PUPPETEER_PDF_DEBUG=False, delete rendered file on object close."""
         title = 'A test template.'
         template = loader.get_template('sample.html')
-        debug = getattr(settings, 'WKHTMLTOPDF_DEBUG', settings.DEBUG)
+        debug = getattr(settings, 'PUPPETEER_PDF_DEBUG', settings.DEBUG)
 
         saved_content, filename = self._render_file(template=template,
                                                     context={'title': title})
@@ -129,14 +121,14 @@ class TestUtils(TestCase):
         self.assertFalse(os.path.isfile(filename))
 
     def test_rendered_file_persists_on_debug(self):
-        """If WKHTMLTOPDF_DEBUG=True, the rendered file should persist."""
+        """If PUPPETEER_PDF_DEBUG=True, the rendered file should persist."""
         title = 'A test template.'
         template = loader.get_template('sample.html')
-        with self.settings(WKHTMLTOPDF_DEBUG=True):
-            debug = getattr(settings, 'WKHTMLTOPDF_DEBUG', settings.DEBUG)
+        with self.settings(PUPPETEER_PDF_DEBUG=True):
+            debug = getattr(settings, 'PUPPETEER_PDF_DEBUG', settings.DEBUG)
 
             saved_content, filename = self._render_file(template=template,
-                                                    context={'title': title})
+                                                        context={'title': title})
             # First verify temp file was rendered correctly.
             self.assertTrue(title in saved_content)
 
@@ -147,14 +139,14 @@ class TestUtils(TestCase):
     def test_render_with_null_request(self):
         """If request=None, the file should render properly."""
         title = 'A test template.'
-        template = loader.get_template('sample.html')
+        loader.get_template('sample.html')
         pdf_content = render_pdf_from_template('sample.html',
                                                header_template=None,
                                                footer_template=None,
                                                context={'title': title})
 
         self.assertTrue(pdf_content.startswith(b'%PDF-'))
-        self.assertTrue(pdf_content.endswith(b'%%EOF\n'))
+        self.assertTrue(pdf_content.endswith(b'%%EOF'))
 
 
 class TestViews(TestCase):
@@ -203,19 +195,19 @@ class TestViews(TestCase):
 
         # Content as a direct output
         response = PDFResponse(content=content, filename="nospace.pdf",
-            show_content_in_browser=True)
+                               show_content_in_browser=True)
         self.assertEqual(response['Content-Disposition'],
                          'inline; filename="nospace.pdf"')
         response = PDFResponse(content=content, filename="one space.pdf",
-            show_content_in_browser=True)
+                               show_content_in_browser=True)
         self.assertEqual(response['Content-Disposition'],
                          'inline; filename="one space.pdf"')
         response = PDFResponse(content=content, filename="4'5\".pdf",
-            show_content_in_browser=True)
+                               show_content_in_browser=True)
         self.assertEqual(response['Content-Disposition'],
                          'inline; filename="4\'5.pdf"')
         response = PDFResponse(content=content, filename=u"♥.pdf",
-            show_content_in_browser=True)
+                               show_content_in_browser=True)
         try:
             import unidecode
         except ImportError:
@@ -259,10 +251,10 @@ class TestViews(TestCase):
 
         pdf_content = response.rendered_content
         self.assertTrue(pdf_content.startswith(b'%PDF-'))
-        self.assertTrue(pdf_content.endswith(b'%%EOF\n'))
+        self.assertTrue(pdf_content.endswith(b'%%EOF'))
 
         # Footer
-        cmd_options = {'title': 'Test PDF'}
+        cmd_options = {}
         response = PDFTemplateResponse(request=request,
                                        template=self.template,
                                        context=context,
@@ -289,10 +281,6 @@ class TestViews(TestCase):
         static_url = 'file://{0}/'.format(settings.STATIC_ROOT)
         self.assertTrue(static_url in footer_content, True)
 
-        pdf_content = response.rendered_content
-        title = '\0'.join(cmd_options['title'])
-        self.assertIn(six.b(title), pdf_content)
-
     def test_pdf_template_response_to_browser(self):
         self.test_pdf_template_response(show_content=True)
 
@@ -316,7 +304,7 @@ class TestViews(TestCase):
         self.assertEqual(response['Content-Disposition'],
                          fileheader.format(self.pdf_filename))
         self.assertTrue(response.content.startswith(b'%PDF-'))
-        self.assertTrue(response.content.endswith(b'%%EOF\n'))
+        self.assertTrue(response.content.endswith(b'%%EOF'))
 
         # As HTML
         request = RequestFactory().get('/?as=html')
@@ -357,7 +345,7 @@ class TestViews(TestCase):
         # best we can do for the moment is check it's a pdf and it worked.
         # self.assertTrue('☃' in response.content)
         self.assertTrue(response.content.startswith(b'%PDF-'))
-        self.assertTrue(response.content.endswith(b'%%EOF\n'))
+        self.assertTrue(response.content.endswith(b'%%EOF'))
 
     def test_pdf_template_view_unicode_to_browser(self):
         self.test_pdf_template_view_unicode(show_content=True)

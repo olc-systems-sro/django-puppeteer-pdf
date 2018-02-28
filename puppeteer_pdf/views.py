@@ -11,7 +11,7 @@ class PDFResponse(HttpResponse):
     """HttpResponse that sets the headers for PDF output."""
 
     def __init__(self, content, status=200, content_type=None,
-            filename=None, show_content_in_browser=None, *args, **kwargs):
+                 filename=None, show_content_in_browser=None, *args, **kwargs):
 
         if content_type is None:
             content_type = 'application/pdf'
@@ -36,14 +36,13 @@ class PDFResponse(HttpResponse):
 
 
 class PDFTemplateResponse(TemplateResponse, PDFResponse):
-    """Renders a Template into a PDF using wkhtmltopdf"""
+    """Renders a Template into a PDF using puppeteer"""
 
     def __init__(self, request, template, context=None,
                  status=None, content_type=None, current_app=None,
                  filename=None, show_content_in_browser=None,
                  header_template=None, footer_template=None,
                  cmd_options=None, *args, **kwargs):
-
         super(PDFTemplateResponse, self).__init__(request=request,
                                                   template=template,
                                                   context=context,
@@ -78,6 +77,7 @@ class PDFTemplateResponse(TemplateResponse, PDFResponse):
             cmd_options=cmd_options
         )
 
+
 class PDFTemplateView(TemplateView):
     """Class-based view for HTML templates rendered to PDF."""
 
@@ -96,7 +96,7 @@ class PDFTemplateView(TemplateView):
     response_class = PDFTemplateResponse
     html_response_class = TemplateResponse
 
-    # Command-line options to pass to wkhtmltopdf
+    # Command-line options to pass to puppeteer
     cmd_options = {
         # 'orientation': 'portrait',
         # 'collate': True,

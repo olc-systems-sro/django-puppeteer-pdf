@@ -19,8 +19,8 @@ settings.configure(
     },
     INSTALLED_APPS=(
         'django.contrib.contenttypes',
-        'wkhtmltopdf.tests',
-        'wkhtmltopdf',
+        'puppeteer_pdf.tests',
+        'puppeteer_pdf',
     ),
     MIDDLEWARE_CLASSES=(
         'django.middleware.common.CommonMiddleware',
@@ -38,7 +38,7 @@ settings.configure(
             'OPTIONS': {},
         },
     ],
-    WKHTMLTOPDF_DEBUG=False,
+    PUPPETEER_PDF_DEBUG=False,
 )
 
 try:
@@ -54,6 +54,6 @@ except ImportError:
 
 
 test_runner = DiscoverRunner(verbosity=1)
-failures = test_runner.run_tests(['wkhtmltopdf'])
+failures = test_runner.run_tests(['puppeteer_pdf'])
 if failures:
     sys.exit(1)

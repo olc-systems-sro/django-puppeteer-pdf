@@ -1,13 +1,14 @@
 from __future__ import absolute_import
 
-from copy import copy
-from itertools import chain
 import os
 import re
-import sys
-import shlex
+import subprocess
+import uuid
+from copy import copy
+from itertools import chain
 from tempfile import NamedTemporaryFile
 
+from django.core.files import File
 from django.utils.encoding import smart_text
 
 try:
@@ -23,30 +24,8 @@ from django.template import loader
 from django.template.context import Context, RequestContext
 from django.utils import six
 
-from .subprocess import check_output
-
-NO_ARGUMENT_OPTIONS = ['--collate', '--no-collate', '-H', '--extended-help', '-g',
-                       '--grayscale', '-h', '--help', '--htmldoc', '--license', '-l',
-                       '--lowquality', '--manpage', '--no-pdf-compression', '-q',
-                       '--quiet', '--read-args-from-stdin', '--readme',
-                       '--use-xserver', '-V', '--version', '--dump-default-toc-xsl',
-                       '--outline', '--no-outline', '--background', '--no-background',
-                       '--custom-header-propagation', '--no-custom-header-propagation',
-                       '--debug-javascript', '--no-debug-javascript', '--default-header',
-                       '--disable-external-links', '--enable-external-links',
-                       '--disable-forms', '--enable-forms', '--images', '--no-images',
-                       '--disable-internal-links', '--enable-internal-links', '-n',
-                       '--disable-javascript', '--enable-javascript', '--keep-relative-links',
-                       '--load-error-handling', '--load-media-error-handling',
-                       '--disable-local-file-access', '--enable-local-file-access',
-                       '--exclude-from-outline', '--include-in-outline', '--disable-plugins',
-                       '--enable-plugins', '--print-media-type', '--no-print-media-type',
-                       '--resolve-relative-links', '--disable-smart-shrinking',
-                       '--enable-smart-shrinking', '--stop-slow-scripts',
-                       '--no-stop-slow-scripts', '--disable-toc-back-links',
-                       '--enable-toc-back-links', '--footer-line', '--no-footer-line',
-                       '--header-line', '--no-header-line', '--disable-dotted-lines',
-                       '--disable-toc-links', '--verbose']
+NO_ARGUMENT_OPTIONS = ['-dhf', '--displayHeaderFooter', '-ht', '--printBackground', '-l', '--landscape',
+                       '-h', '--help', '-V', '--version']
 
 
 def _options_to_args(**options):
@@ -55,6 +34,7 @@ def _options_to_args(**options):
     Skip arguments where no value is provided
     For flag-type (No argument) variables, pass only the name and only then if the value is True
     """
+
     flags = []
     for name in sorted(options):
         value = options[name]
@@ -70,90 +50,79 @@ def _options_to_args(**options):
     return flags
 
 
-def wkhtmltopdf(pages, output=None, **kwargs):
+def puppeteer_to_pdf(input, output=None, **kwargs):
     """
-    Converts html to PDF using http://wkhtmltopdf.org/.
+    Converts html to PDF using page.pdf(options)
+    https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagepdfoptions
 
-    pages: List of file paths or URLs of the html to be converted.
+    input: file path or URL of the html to be converted.
     output: Optional output file path. If None, the output is returned.
-    **kwargs: Passed to wkhtmltopdf via _extra_args() (See
-              https://github.com/antialize/wkhtmltopdf/blob/master/README_WKHTMLTOPDF
-              for acceptable args.)
-              Kwargs is passed through as arguments. e.g.:
-                  {'footer_html': 'http://example.com/foot.html'}
-              becomes
-                  '--footer-html http://example.com/foot.html'
-
-              Where there is no value passed, use True. e.g.:
-                  {'disable_javascript': True}
-              becomes:
-                  '--disable-javascript'
-
-              To disable a default option, use None. e.g:
-                  {'quiet': None'}
-              becomes:
-                  ''
-
+    **kwargs: Passed to puppeteer page.pdf via options
     example usage:
-        wkhtmltopdf(pages=['/tmp/example.html'],
-                    dpi=300,
-                    orientation='Landscape',
-                    disable_javascript=True)
+        puppeteer_to_pdf(input='/tmp/example.html')
     """
-    if isinstance(pages, six.string_types):
-        # Support a single page.
-        pages = [pages]
+    debug = getattr(settings, 'PUPPETEER_PDF_DEBUG', os.environ.get('PUPPETEER_PDF_DEBUG', settings.DEBUG))
 
-    if output is None:
-        # Standard output.
-        output = '-'
+    input = file_path(input)
+
+    if not output:
+        output = '/tmp/{}.pdf'.format(uuid.uuid4())
 
     # Default options:
-    options = getattr(settings, 'WKHTMLTOPDF_CMD_OPTIONS', None)
+    options = getattr(settings, 'PUPPETEER_PDF_CMD_OPTIONS', None)
     if options is None:
-        options = {'quiet': True}
+        options = {'path': output}
     else:
         options = copy(options)
     options.update(kwargs)
 
-    # Force --encoding utf8 unless the user has explicitly overridden this.
-    options.setdefault('encoding', 'utf8')
+    cmd = 'PUPPETEER_PDF_CMD'
+    CHROME_LOCATION = 'puppeteer-pdf'  # default
+    cmd = getattr(settings, cmd, os.environ.get(cmd, CHROME_LOCATION))
 
-    env = getattr(settings, 'WKHTMLTOPDF_ENV', None)
-    if env is not None:
-        env = dict(os.environ, **env)
+    ck_args = list(chain([cmd],
+                         [input],
+                         _options_to_args(**options)))
 
-    cmd = 'WKHTMLTOPDF_CMD'
-    cmd = getattr(settings, cmd, os.environ.get(cmd, 'wkhtmltopdf'))
+    sub_cmd = ' '.join(ck_args)
+    if debug:
+        print(sub_cmd)
+    subprocess.call(sub_cmd, shell=True)
 
-    ck_args = list(chain(shlex.split(cmd),
-                         _options_to_args(**options),
-                         list(pages),
-                         [output]))
-    ck_kwargs = {'env': env}
-    # Handling of fileno() attr. based on https://github.com/GrahamDumpleton/mod_wsgi/issues/85
-    try:
-        i = sys.stderr.fileno()
-        ck_kwargs['stderr'] = sys.stderr
-    except (AttributeError, IOError):
-        # can't call fileno() on mod_wsgi stderr object
-        pass
+    if os.path.isfile(output):
+        with open(output, 'rb') as f:
+            return File(f).read()
+    else:
+        return None
 
-    return check_output(ck_args, **ck_kwargs)
+
+def file_path(path):
+    """Return path with file protocol
+    Ignore if it already starts with file path or http
+    """
+    if not path.startswith('http') and not path.startswith('file'):
+        path = "file://{}".format(path)
+    return path
+
 
 def convert_to_pdf(filename, header_filename=None, footer_filename=None, cmd_options=None):
     # Clobber header_html and footer_html only if filenames are
     # provided. These keys may be in self.cmd_options as hardcoded
     # static files.
-    # The argument `filename` may be a string or a list. However, wkhtmltopdf
+    # The argument `filename` may be a string or a list. However, puppeteer_pdf
     # will coerce it into a list if a string is passed.
     cmd_options = cmd_options if cmd_options else {}
 
     if header_filename is not None:
-        cmd_options['header_html'] = header_filename
+        cmd_options['headerTemplate'] = file_path(header_filename)
+        # with open(header_filename, 'r') as f:
+        #     cmd_options['headerTemplate'] = "'{}'".format(f.read().replace('\n', ''))
     if footer_filename is not None:
-        cmd_options['footer_html'] = footer_filename
-    return wkhtmltopdf(pages=filename, **cmd_options)
+        cmd_options['footerTemplate'] = file_path(footer_filename)
+        # with open(footer_filename, 'r') as f:
+        #     cmd_options['footerTemplate'] = "'{}'".format(f.read().replace('\n', ''))
+    return puppeteer_to_pdf(input=filename, **cmd_options)
+
 
 class RenderedFile(object):
     """
@@ -164,13 +133,13 @@ class RenderedFile(object):
     filename = ''
 
     def __init__(self, template, context, request=None):
-        debug = getattr(settings, 'WKHTMLTOPDF_DEBUG', settings.DEBUG)
+        debug = getattr(settings, 'PUPPETEER_PDF_DEBUG', os.environ.get('PUPPETEER_PDF_DEBUG', settings.DEBUG))
 
         self.temporary_file = render_to_temporary_file(
             template=template,
             context=context,
             request=request,
-            prefix='wkhtmltopdf', suffix='.html',
+            prefix='puppeteer', suffix='.html',
             delete=(not debug)
         )
         self.filename = self.temporary_file.name
@@ -179,6 +148,7 @@ class RenderedFile(object):
         # Always close the temporary_file on object destruction.
         if self.temporary_file is not None:
             self.temporary_file.close()
+
 
 def render_pdf_from_template(input_template, header_template, footer_template, context, request=None, cmd_options=None):
     # For basic usage. Performs all the actions necessary to create a single
@@ -216,6 +186,7 @@ def render_pdf_from_template(input_template, header_template, footer_template, c
                           header_filename=header_filename,
                           footer_filename=footer_filename,
                           cmd_options=cmd_options)
+
 
 def content_disposition_filename(filename):
     """
@@ -287,6 +258,7 @@ def make_absolute_paths(content):
                                       occur[len(x['url']):])
 
     return content
+
 
 def render_to_temporary_file(template, context, request=None, mode='w+b',
                              bufsize=-1, suffix='.html', prefix='tmp',

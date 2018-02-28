@@ -38,10 +38,10 @@ It accepts the following class attributes:
 
 :py:attr:`cmd_options`
     The dictionary of command-line arguments passed to the underlying
-    ``wkhtmltopdf`` binary.
+    ``puppeteer-pdf`` binary.
     Default is ``{}``.
 
-    wkhtmltopdf options can be found by running ``wkhtmltopdf --help``.
+    puppeteer-pdf options can be found by running ``puppeteer-pdf --help``.
     Unfortunately they don't provide hosted documentation.
 
 .. note::
@@ -58,7 +58,7 @@ Point a URL at :py:class:`PDFTemplateView`:
 .. code-block:: python
 
     from django.conf.urls.defaults import *
-    from wkhtmltopdf.views import PDFTemplateView
+    from puppeteer_pdf.views import PDFTemplateView
 
 
     urlpatterns = patterns('',
@@ -78,7 +78,7 @@ and override the sections you need to.
 
 .. code-block:: python
 
-    from wkhtmltopdf.views import PDFTemplateView
+    from puppeteer_pdf.views import PDFTemplateView
 
 
     class MyPDF(PDFTemplateView):
@@ -92,7 +92,7 @@ Unicode characters
 ------------------
 
 Templates containing utf-8 characters should be supported. You will need to
-ensure that you set the content type in your template file for `wkhtmltopdf` to
+ensure that you set the content type in your template file for `puppeteer-pdf` to
 interpret it properly.
 
 .. code-block:: html
