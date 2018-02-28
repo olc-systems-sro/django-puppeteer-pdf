@@ -1,0 +1,2 @@
+django==1.11.10
+bumpversion==0.5.3
