@@ -9,6 +9,10 @@ django-puppeteer-pdf
    :target: https://travis-ci.org/namespace-ee/django-puppeteer-pdf
    :alt: Travis-CI
 
+.. image:: https://readthedocs.org/projects/django-puppeteer-pdf/badge/?version=latest
+    :target: http://django-puppeteer-pdf.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
 .. image:: https://img.shields.io/pypi/dm/django-puppeteer-pdf.svg
     :target: https://badge.fury.io/py/django-puppeteer-pdf
     :alt: Number of PyPI downloads on a month
@@ -27,16 +31,24 @@ Requirements
 cli for puppeteer `puppeteer-pdf <https://www.npmjs.com/package/puppeteer-pdf>`_.
 
 Python 2.6+ and 3.3+ are supported.
+See travis-ci build status for details
 
+
+Note
+------------
+
+* Current version is only tested as a use of django rest framework renderer `examples/drf_renderer.py`
+* Documentation is not up to date but you can see working use cases in `examples` directory
+* Reporting bugs and issues is welcomed
 
 Installation
 ------------
 
 Run ``pip install django-puppeteer-pdf``.
 
-Add ``'puppeteer_pdf'`` to ``INSTALLED_APPS`` in your ``settings.py``.
-
 By default it will execute the first ``puppeteer-pdf`` command found on your ``PATH``.
+
+It is recommended to specify full path of puppeteer-pdf using one of the way mentioned below.
 
 If you can't add puppeteer-pdf to your ``PATH``, you can set ``PUPPETEER_PDF_CMD`` to a
 specific executable:
