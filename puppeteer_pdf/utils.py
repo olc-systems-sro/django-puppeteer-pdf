@@ -22,7 +22,6 @@ import django
 from django.conf import settings
 from django.template import loader
 from django.template.context import Context, RequestContext
-from django.utils import six
 
 NO_ARGUMENT_OPTIONS = ['-dhf', '--displayHeaderFooter', '-ht', '--printBackground', '-l', '--landscape',
                        '-h', '--help', '-V', '--version']
@@ -46,7 +45,7 @@ def _options_to_args(**options):
         flags.append(formatted_flag)
         if accepts_no_arguments:
             continue
-        flags.append(six.text_type(value))
+        flags.append(str(value))
     return flags
 
 
@@ -209,7 +208,7 @@ def http_quote(string):
     valid ascii charset string you can use in, say, http headers and the
     like.
     """
-    if isinstance(string, six.text_type):
+    if isinstance(string, str):
         try:
             import unidecode
         except ImportError:
