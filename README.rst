@@ -1,5 +1,5 @@
 django-puppeteer-pdf
-==================
+====================
 
 .. image:: https://badge.fury.io/py/django-puppeteer-pdf.png
     :target: http://badge.fury.io/py/django-puppeteer-pdf
