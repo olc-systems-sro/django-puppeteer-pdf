@@ -1,17 +1,15 @@
 from setuptools import setup, find_packages
 
-import puppeteer_pdf
-
 
 setup(
     name='django-puppeteer-pdf',
     packages=find_packages(),
     include_package_data=True,
-    version=puppeteer_pdf.__version__,
+    version='0.1.4',
     description='Converts HTML to PDF using puppeteer.',
     long_description=open('README.rst').read(),
     license='BSD-2-Clause',
-    author=puppeteer_pdf.__author__,
+    author='Namespace',
     author_email='admin@incuna.com',
     url='https://github.com/incuna/django-puppeteer-pdf',
     zip_safe=False,
