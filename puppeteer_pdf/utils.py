@@ -231,11 +231,11 @@ def make_absolute_paths(content):
     correctly get it displayed in PDFs."""
     overrides = [
         {
-            'root': settings.MEDIA_ROOT,
+            'root': str(settings.MEDIA_ROOT),
             'url': settings.MEDIA_URL,
         },
         {
-            'root': settings.STATIC_ROOT,
+            'root': str(settings.STATIC_ROOT),
             'url': settings.STATIC_URL,
         }
     ]
